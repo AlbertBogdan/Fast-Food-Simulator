@@ -5,6 +5,7 @@ using FastFoodSimulatorLibrary.Order;
 using FastFoodSimulatorLibrary.Server_;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ public class Restaurant : IRestaurant
     private List<Person> Chefs;
     private List<Person> Traders;
     private Queue<OrderTicket> orderTickets = new Queue<OrderTicket>();
-    private Queue<OrderTicket> order = new Queue<OrderTicket>();
+    private Queue<OrderTicket> takingOrders = new Queue<OrderTicket>();
 
 
 
@@ -124,14 +125,17 @@ public class Restaurant : IRestaurant
     // Previous code
     private async Task SimulateCustomersAsync(CancellationToken cancellationToken, int customerCount)
     {
+        var freeTraders = GetFreeWorker(Traders);
         var customer = new Customer(customerCount);
+        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
+
         var orderTicket = await customer.PlaceOrderAsync(this.kitchen);
         orderTickets.Enqueue(orderTicket);
         //var freeChefs = Chefs.Where(chef => !chef.isWork).ToList();
         var freeChefs = GetFreeWorker(Chefs);
-        var freeTraders = GetFreeWorker(Traders);
 
         var chef = await kitchen.GetNextOrderAsync((Chef)freeChefs);
+        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
         StringReturned?.Invoke(this, new Message("Chefs", GetListWorker(Chefs)));
         StringReturned?.Invoke(this, new Message("Traders", GetListWorker(Traders)));
 
@@ -141,12 +145,13 @@ public class Restaurant : IRestaurant
         chef.isWork = false;
         //kitchen.Dequeue();
         StringReturned?.Invoke(this, new Message("Chefs", GetListWorker(Chefs)));
-        var served = orderTickets.Dequeue();
-        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(1)}"));
+        orderTickets.Dequeue();
         await Task.Delay(customerInterval, cancellationToken);
+        StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
+        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
     }
 
-    public string GetOrderList(int n)
+    public string GetOrderList<T>(Queue<T> order)
     {
         var str = "";
         foreach (var item in orderTickets)
@@ -175,33 +180,16 @@ public class Restaurant : IRestaurant
             switch (worker)
             {
                 case Trader trader:
-                    info += $"{trader.Name} ";
-                    if (trader.isWork)
-                    {
-                        info += $"№{trader.ticket.OrderNumber}\n";
-                    }
-                    else
-                    {
-                        info += "Free\n";
-                    }
+                    info += $"{trader.Name} {(trader.isWork ? $"№{trader.ticket.OrderNumber}\n" : "Free\n")}";
                     break;
                 case Chef chef:
-                    info += $"{chef.Name} ";
-                    if (chef.isWork)
-                    {
-                        info += $"№{chef.ticket.OrderNumber}\n";
-                    }
-                    else
-                    {
-                        info += "Free\n";
-                    }
+                    info += $"{chef.Name} {(chef.isWork ? $"№{chef.ticket.OrderNumber}\n" : "Free\n")}";
                     break;
                 default:
                     info += "Неверный тип работника.";
                     break;
             }
         }
-        // Возвращаем строку текста
         return info;
     }
 }

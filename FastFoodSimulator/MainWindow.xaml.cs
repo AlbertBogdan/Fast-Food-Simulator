@@ -1,4 +1,5 @@
 ﻿using FastFoodSimulatorLibrary;
+using FastFoodSimulatorLibrary.Order;
 using FastFoodSimulatorLibrary.Restaurant_;
 using FastFoodSimulatorLibrary.Server_;
 using System;
@@ -63,7 +64,7 @@ public partial class MainWindow : Window
             dispatcher.Invoke(() =>
             {
                 var textBoxToUpdate = GetTextBoxToUpdate(result.Name);
-                if (textBoxToUpdate == tbTicket || textBoxToUpdate == tbChef || textBoxToUpdate == tbTrader)
+                if (textBoxToUpdate == tbTicket || textBoxToUpdate == tbChef || textBoxToUpdate == tbTrader || textBoxToUpdate == tbTakeOrder)
                     textBoxToUpdate.Text = result.Msg;
                 else
                     textBoxToUpdate.Text += $"{result.Msg}\n";
@@ -86,6 +87,8 @@ public partial class MainWindow : Window
                 return tbTrader;
             case "Order":
                 return tbTicket;
+            case "TakeOrder":
+                return tbTakeOrder;
             default:
                 return tbServer;
         }
@@ -101,13 +104,5 @@ public partial class MainWindow : Window
         }
     }
 
-    private void tbTicket_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-    {
-
-        foreach (var item in restaurant.GetOrderList(1))
-        {
-            tbTicket.Text = item.ToString();
-        }
-    }
     //        <ListBox x:Name="tbMsg" Height="150" Width="600" Margin="00,0,00,00"/>
 }

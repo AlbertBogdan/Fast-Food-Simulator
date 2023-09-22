@@ -37,4 +37,10 @@ public class Server : IServer
         }
         return str;
     }
+
+    public Queue<OrderTicket> returnList()
+    {
+        serviceQueue.Dequeue();
+        return serviceQueue;
+    }
 }

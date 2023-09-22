@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FastFoodSimulator"
         mc:Ignorable="d"
+        Background="#1E1F26"
         Title="FastFoodSimulator" Height="675" Width="1500">
     <Grid>
         <Grid.RowDefinitions>
@@ -24,37 +25,39 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Customer Interval:" Grid.Row="0" Grid.Column="0" Margin="10"/>
-        <TextBox x:Name="tbCustomerInterval" Grid.Row="0" Grid.Column="1" Width="400" Height="25" Margin="10"/>
+        <TextBlock Foreground="#D0E1F9" Background="#1E1F26" Text="Customer Interval:" Grid.Row="0" Grid.Column="0" Margin="10"/>
+        <TextBox x:Name="tbCustomerInterval" Foreground="#D0E1F9"  Background="#283655" Grid.Row="0" Grid.Column="1" Width="400" Height="25" Margin="10"/>
 
-        <TextBlock Text="Chef Counter:" Grid.Row="1" Grid.Column="0" Height="20" Margin="10"/>
-        <TextBox x:Name="tbChefs" Grid.Row="1" Grid.Column="1" Width="400" Height="25" Margin="10"/>
+        <TextBlock Text="Chef Counter:" Grid.Row="1" Foreground="#D0E1F9" Background="#1E1F26" Grid.Column="0" Height="20" Margin="10"/>
+        <TextBox x:Name="tbChefs" Foreground="#D0E1F9"  Background="#283655" Grid.Row="1" Grid.Column="1" Width="400" Height="25" Margin="10"/>
 
-        <TextBlock Text="Trader Counter:" Grid.Row="2" Grid.Column="0" Margin="10"/>
-        <TextBox x:Name="tbTraders" Grid.Row="2" Grid.Column="1" Width="400" Height="25" Margin="10"/>
+        <TextBlock Text="Trader Counter:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="2" Grid.Column="0" Margin="10"/>
+        <TextBox x:Name="tbTraders" Foreground="#D0E1F9"  Background="#283655" Grid.Row="2" Grid.Column="1" Width="400" Height="25" Margin="10"/>
 
-        <TextBlock Text="Order Interval:" Grid.Row="3" Grid.Column="0" Height="20" Margin="10"/>
-        <TextBox x:Name="tbOrderInterval" Grid.Row="3" Grid.Column="1" Width="400" Height="25" Margin="10"/>
+        <TextBlock Text="Order Interval:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="3" Grid.Column="0" Height="20" Margin="10"/>
+        <TextBox x:Name="tbOrderInterval" Foreground="#D0E1F9"  Background="#283655" Grid.Row="3" Grid.Column="1" Width="400" Height="25" Margin="10"/>
 
-        <Button x:Name="btStart" Content="Start" FontSize="20" Click="btStart_Click" Grid.Row="4" Grid.Column="0" Width="100" Height="35" Margin="10"/>
-        <Button x:Name="btStop" Content="Stop" FontSize="20" Click="btStop_ClickAsync" Grid.Row="4" Grid.Column="1" Width="100" Height="35" Margin="10"/>
+        <Button x:Name="btStart" Foreground="#D0E1F9"  Background="#4D648D" Content="Start" FontSize="20" Click="btStart_Click" Grid.Row="4" Grid.Column="0" Width="100" Height="35" Margin="10"/>
+        <Button x:Name="btStop" Foreground="#D0E1F9"  Background="#4D648D" Content="Stop" FontSize="20" Click="btStop_ClickAsync" Grid.Row="4" Grid.Column="1" Width="100" Height="35" Margin="10"/>
 
-        <Label Content="Cook:" Grid.Row="2" Grid.Column="4" Margin="10"/>
-        <TextBox x:Name="tbCook" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="4" Width="250" Height="250" Margin="10"/>
+        <Label Content="Cook:" Grid.Row="2" Foreground="#D0E1F9" Background="#1E1F26" Grid.Column="4" Margin="10"/>
+        <TextBox x:Name="tbCook" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="4" Width="250" Height="250" Margin="10"/>
 
-        <Label Content="Orders:" Grid.Row="0" Grid.Column="2" Margin="10"/>
-        <TextBox x:Name="tbTicket" MouseDoubleClick="tbTicket_MouseDoubleClick" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="2" Width="250" Height="150" Margin="10"/>
+        <Label Content="Orders:" Grid.Row="0" Foreground="#D0E1F9" Background="#1E1F26" Grid.Column="2" Margin="10"/>
+        <TextBox x:Name="tbTicket" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="2" Width="250" Height="150" Margin="10"/>
+        <Label Content="Take Order:" Grid.Row="0" Foreground="#D0E1F9" Background="#1E1F26" Grid.Column="5" Margin="10"/>
+        <TextBox x:Name="tbTakeOrder" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="5" Width="135" Height="150" Margin="10"/>
 
-        <Label Content="Kitchen:" Grid.Row="2" Grid.Column="2" Margin="10"/>
-        <TextBox x:Name="tbKitchen" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="2" Width="250" Height="250" Margin="10"/>
+        <Label Content="Kitchen:" Grid.Row="2" Foreground="#D0E1F9" Background="#1E1F26" Grid.Column="2" Margin="10"/>
+        <TextBox x:Name="tbKitchen" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="2" Width="250" Height="250" Margin="10"/>
 
-        <Label Content="Server:" Grid.Row="2" Grid.Column="3" Margin="10"/>
-        <TextBox x:Name="tbServer" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="3" Width="250" Height="250" Margin="10"/>
+        <Label Content="Server:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="2" Grid.Column="3" Margin="10"/>
+        <TextBox x:Name="tbServer" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="3" Width="250" Height="250" Margin="10"/>
 
-        <Label Content="Chef:" Grid.Row="0" Grid.Column="4" Margin="10"/>
-        <TextBox x:Name="tbChef" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="4" Width="250" Height="150" Margin="10"/>
+        <Label Content="Chef:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="0" Grid.Column="4" Margin="10"/>
+        <TextBox x:Name="tbChef" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="4" Width="250" Height="150" Margin="10"/>
 
-        <Label Content="Trader:" Grid.Row="0" Grid.Column="3" Margin="10"/>
-        <TextBox x:Name="tbTrader" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="3" Width="250" Height="150" Margin="10"/>
+        <Label Content="Trader:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="0" Grid.Column="3" Margin="10"/>
+        <TextBox x:Name="tbTrader" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="3" Width="250" Height="150" Margin="10"/>
     </Grid>
 </Window>
