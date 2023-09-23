@@ -18,14 +18,14 @@ public class Server : IServer
 
     public async Task ServeOrder(Chef orderTicket, int orderinterval)
     {
+        serviceQueue.Enqueue(orderTicket.ticket);
         await Task.Delay(orderinterval); // Simulate order preparation time
         lock (queueLock)
         {
+            StringReturned?.Invoke(this, new Message("Server", $"Order {orderTicket.ticket.OrderNumber} is ready to be served."));
             servedCount++;
-            serviceQueue.Enqueue(orderTicket.ticket);
             orderTicket.ticket.OrderReady.SetResult(true);
         }
-        StringReturned?.Invoke(this, new Message("Server" , $"Order {orderTicket.ticket.OrderNumber} is ready to be served."));
 
     }
     public string GetOrderList(int n)
@@ -40,7 +40,6 @@ public class Server : IServer
 
     public Queue<OrderTicket> returnList()
     {
-        serviceQueue.Dequeue();
         return serviceQueue;
     }
 }

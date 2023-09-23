@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace FastFoodSimulatorLibrary.Employee_;
 
-public class Trader : Person
+public class Trader:Person
 {
+    public OrderTicket ticket { get; set; }
+
     public Trader(string Name) : base(Name)
     {
         this.Name = Name;
         isWork = false;
     }
-
-    public OrderTicket ticket { get; set; }
-
 }
