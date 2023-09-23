@@ -89,6 +89,8 @@ public partial class MainWindow : Window
                 return tbTicket;
             case "TakeOrder":
                 return tbTakeOrder;
+            case "TraderDo":
+                return tbTraderDo;
             default:
                 return tbServer;
         }

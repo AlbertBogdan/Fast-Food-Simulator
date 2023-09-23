@@ -139,6 +139,7 @@ public class Restaurant : IRestaurant
 
         await Task.Delay(customerInterval, cancellationToken);
         freeTrader.isWork = freeTrader.isWork ? false : true;
+        StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} take Order N{freeTrader.ticket.OrderNumber}"));
         var chef = await kitchen.GetNextOrderAsync((Chef)freeChefs);
         StringReturned?.Invoke(this, new Message("Chefs", GetListWorker(Chefs)));
         StringReturned?.Invoke(this, new Message("Traders", GetListWorker(Traders)));
@@ -164,7 +165,7 @@ public class Restaurant : IRestaurant
 
         StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
         StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
-
+        StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} reserve order to Customer N{customer.CustomerNumber}"));
         takingOrders.Dequeue();
         freeTrader.isWork = freeTrader.isWork ? false : true;
 
