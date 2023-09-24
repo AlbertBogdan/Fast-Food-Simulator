@@ -5,8 +5,6 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFoodSimulator", "FastFoodSimulator\FastFoodSimulator.csproj", "{53B1AA7A-8D47-48D8-B12B-41EECC702627}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastWoodSimulatorConsole", "FastWoodSimulatorConsole\FastWoodSimulatorConsole.csproj", "{C6D5EAEA-0D54-4FDD-92E4-1CFCC65BDD0D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastFoodSimulatorLibrary", "FastFoodSimulatorLibrary\FastFoodSimulatorLibrary.csproj", "{EA21E178-E26B-4DFF-B90F-C38108EB23A6}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{53B1AA7A-8D47-48D8-B12B-41EECC702627}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53B1AA7A-8D47-48D8-B12B-41EECC702627}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53B1AA7A-8D47-48D8-B12B-41EECC702627}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6D5EAEA-0D54-4FDD-92E4-1CFCC65BDD0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6D5EAEA-0D54-4FDD-92E4-1CFCC65BDD0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6D5EAEA-0D54-4FDD-92E4-1CFCC65BDD0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6D5EAEA-0D54-4FDD-92E4-1CFCC65BDD0D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA21E178-E26B-4DFF-B90F-C38108EB23A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA21E178-E26B-4DFF-B90F-C38108EB23A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA21E178-E26B-4DFF-B90F-C38108EB23A6}.Release|Any CPU.ActiveCfg = Release|Any CPU

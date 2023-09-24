@@ -1,10 +1,12 @@
 ﻿using FastFoodSimulatorLibrary.Customer_;
 using FastFoodSimulatorLibrary.Employee_;
+using FastFoodSimulatorLibrary.Events;
 using FastFoodSimulatorLibrary.Kitchen_;
 using FastFoodSimulatorLibrary.Order;
 using FastFoodSimulatorLibrary.Server_;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -16,18 +18,23 @@ public class Restaurant : IRestaurant
 {
     private int customerInterval;
     private int orderInterval;
+
     private CancellationTokenSource cancellationTokenSource;
     private CancellationToken cancellationToken;
-    private List<Customer> customers;
+
     private Kitchen kitchen;
     private Cook cook;
     private Server server;
+
     public event EventHandler<Message> StringReturned;
     public event EventHandler<Chef> Work;
-    private List<Person> Chefs;
-    private List<Person> Traders;
-    private Queue<OrderTicket> orderTickets = new Queue<OrderTicket>();
-    private Queue<OrderTicket> takingOrders = new Queue<OrderTicket>();
+
+    private List<Person> Chefs = new List<Person>();
+    private List<Person> Traders = new List<Person>();
+    private List<Customer> customers;
+
+    private ObservableQueue<OrderTicket> orderTickets = new ObservableQueue<OrderTicket>("Order");
+    private ObservableQueue<OrderTicket> takingOrders = new ObservableQueue<OrderTicket>("TakeOrder");
 
 
 
@@ -35,14 +42,23 @@ public class Restaurant : IRestaurant
     {
         this.customerInterval = customerInterval;
         this.orderInterval = orderInterval;
+
         this.cancellationTokenSource = new CancellationTokenSource();
         this.cancellationToken = cancellationTokenSource.Token;
+
         this.customers = new List<Customer>();
         this.kitchen = new Kitchen();
         this.cook = new Cook();
         this.server = new Server();
+
         Chefs = GetWorkers<Chef>(chefcount);
         Traders = GetWorkers<Trader>(tradecount);
+
+        orderTickets.ItemEnqueued += Queue_ItemEnqueued;
+        takingOrders.ItemEnqueued += Queue_ItemEnqueued;
+        orderTickets.ItemDequeued += Queue_ItemDequeued;
+        takingOrders.ItemDequeued += Queue_ItemDequeued;
+
         server.StringReturned += (sender, result) =>
         {
             StringReturned?.Invoke(this, result);
@@ -56,6 +72,8 @@ public class Restaurant : IRestaurant
             StringReturned?.Invoke(this, result);
         };
     }
+
+
 
     public Person GetFreeWorker<T>(List<T> workers) where T : Person
     {
@@ -71,10 +89,8 @@ public class Restaurant : IRestaurant
     }
     public List<Person> GetWorkers<T>(int count) where T : Person
     {
-        // Создаем пустой список
         List<Person> workers = new List<Person>();
 
-        // Добавляем в список работников нужного типа
         if (typeof(T) == typeof(Trader))
         {
             for (var i = 0; i < count; i++)
@@ -90,9 +106,14 @@ public class Restaurant : IRestaurant
             }
         }
 
-        // Возвращаем список работников
+        foreach (var worker in workers)
+        {
+            worker.PropertyChanged += Person_PropertyChanged;
+        }
+
         return workers;
     }
+
     public void Start(CancellationToken cancellationToken)
     {
         Task.Run(() => SimulationStart(cancellationToken));
@@ -122,11 +143,8 @@ public class Restaurant : IRestaurant
 
     }
 
-    // Previous code
     private async Task SimulateCustomersAsync(CancellationToken cancellationToken, int customerCount)
     {
-        StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
-        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}")); var freeTraders = GetFreeWorker(Traders);
         var freeTrader = (Trader)GetFreeWorker(Traders);
         var customer = new Customer(customerCount);
         var orderTicket = await customer.PlaceOrderAsync(this.kitchen);
@@ -135,37 +153,25 @@ public class Restaurant : IRestaurant
         orderTickets.Enqueue(orderTicket);
         var freeChefs = GetFreeWorker(Chefs);
 
-        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
-
-        await Task.Delay(customerInterval, cancellationToken);
+        StringReturned?.Invoke(this, new Message("TraderDo", $"The {freeTrader.Name} passed the order N{freeTrader.ticket.OrderNumber} to the kitchen"));
         freeTrader.isWork = freeTrader.isWork ? false : true;
-        StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} take Order N{freeTrader.ticket.OrderNumber}"));
+
         var chef = await kitchen.GetNextOrderAsync((Chef)freeChefs);
-        StringReturned?.Invoke(this, new Message("Chefs", GetListWorker(Chefs)));
-        StringReturned?.Invoke(this, new Message("Traders", GetListWorker(Traders)));
 
         Work?.Invoke(this, chef);
         await orderTicket.OrderReady.Task;
         chef.isWork = false;
 
-        StringReturned?.Invoke(this, new Message("Chefs", GetListWorker(Chefs)));
-        StringReturned?.Invoke(this, new Message("Traders", GetListWorker(Traders)));
 
-        var res = orderTickets.Dequeue();
-        takingOrders.Enqueue(res);
+        takingOrders.Enqueue(orderTickets.Dequeue());
         freeTrader = (Trader)GetFreeWorker(Traders);
-        freeTrader.ticket = res;
+        freeTrader.ticket = takingOrders.First();
         freeTrader.isWork = freeTrader.isWork ? false : true;
 
-        StringReturned?.Invoke(this, new Message("Traders", GetListWorker(Traders)));
-        StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
-        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
 
         await Task.Delay(customerInterval, cancellationToken);
 
-        StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
-        StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
-        StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} reserve order to Customer N{customer.CustomerNumber}"));
+        StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} has transferred the order N{freeTrader.ticket.OrderNumber} to the Customer N{customer.CustomerNumber}."));
         takingOrders.Dequeue();
         freeTrader.isWork = freeTrader.isWork ? false : true;
 
@@ -190,6 +196,47 @@ public class Restaurant : IRestaurant
                 await cook.PrepareOrderAsync(result, server, orderInterval);
             }
         };
+    }
+    private void Queue_ItemEnqueued(object sender, ItemDequeuedEventArgs<OrderTicket> e)
+    {
+
+    }
+    private void Queue_ItemDequeued(object? sender, ItemDequeuedEventArgs<OrderTicket> e)
+    {
+        Check(sender);
+    }
+    private void Queue_ItemEnqueued(object sender, ItemEnqueuedEventArgs<OrderTicket> e)
+    {
+        Check(sender);
+    }
+
+    private void Check(object sender)
+    {
+        ObservableQueue<OrderTicket> queue = (ObservableQueue<OrderTicket>)sender;
+
+        if (queue.QueueName == "Order")
+        {
+            StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
+        }
+        else if (queue.QueueName == "TakeOrder")
+        {
+            StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
+        }
+    }
+
+    private void Person_PropertyChanged(object? sender, EventArgs e)
+    {
+        switch (sender)
+        {
+            case Trader trader:
+                StringReturned?.Invoke(this, new Message("Traders", GetListWorker(Traders)));
+                break;
+            case Chef chef:
+                StringReturned?.Invoke(this, new Message("Chefs", GetListWorker(Chefs)));
+                break;
+            default:
+                break;
+        }
     }
 
     public string GetListWorker(List<Person> workers)
