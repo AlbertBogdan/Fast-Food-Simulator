@@ -81,7 +81,7 @@ public class Restaurant : IRestaurant
         while (true)
         {
             freeWorker = workers[new Random().Next(0, workers.Count)];
-            if (freeWorker != null && !freeWorker.isWork)
+            if (freeWorker != null && !freeWorker.IsWork)
             {
                 return freeWorker;
             }
@@ -146,11 +146,15 @@ public class Restaurant : IRestaurant
     private async Task SimulateCustomersAsync(CancellationToken cancellationToken, int customerCount)
     {
         var freeTrader = (Trader)GetFreeWorker(Traders);
+
         var customer = new Customer(customerCount);
         var orderTicket = await customer.PlaceOrderAsync(this.kitchen);
 
         freeTrader.ticket = orderTicket;
-        freeTrader.isWork = true;
+        freeTrader.IsWork = true;
+
+        await Task.Delay(300, cancellationToken);
+        freeTrader.IsWork = false;
 
         orderTickets.Enqueue(orderTicket);
         var freeChefs = GetFreeWorker(Chefs);
@@ -158,15 +162,11 @@ public class Restaurant : IRestaurant
         StringReturned?.Invoke(this, new Message("TraderDo", $"The {freeTrader.Name} passed the order N{freeTrader.ticket.OrderNumber} to the kitchen"));
 
 
-        freeTrader.isWork = false;
-        freeTrader.ticket = null;
-        freeTrader = null;
-
         var chef = await kitchen.GetNextOrderAsync((Chef)freeChefs);
 
         Work?.Invoke(this, chef);
         await orderTicket.OrderReady.Task;
-        chef.isWork = false;
+        chef.IsWork = false;
 
 
         var res = orderTickets.Dequeue();
@@ -174,13 +174,13 @@ public class Restaurant : IRestaurant
 
         freeTrader = (Trader)GetFreeWorker(Traders);
         freeTrader.ticket = res;
-        freeTrader.isWork = true;
+        freeTrader.IsWork = true;
 
 
         await Task.Delay(customerInterval, cancellationToken);
 
         StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} has transferred the order N{freeTrader.ticket.OrderNumber} to the Customer N{customer.CustomerNumber}."));
-        freeTrader.isWork = false;
+        freeTrader.IsWork = false;
         takingOrders.Dequeue();
 
     }
@@ -253,10 +253,10 @@ public class Restaurant : IRestaurant
             switch (worker)
             {
                 case Trader trader:
-                    info += $"{trader.Name} {(trader.isWork ? $"№{trader.ticket.OrderNumber}\n" : "Free\n")}";
+                    info += $"{trader.Name} {(trader.IsWork ? $"№{trader.ticket.OrderNumber}\n" : "Free\n")}";
                     break;
                 case Chef chef:
-                    info += $"{chef.Name} {(chef.isWork ? $"№{chef.ticket.OrderNumber}\n" : "Free\n")}";
+                    info += $"{chef.Name} {(chef.IsWork ? $"№{chef.ticket.OrderNumber}\n" : "Free\n")}";
                     break;
                 default:
                     info += "Неверный тип работника.";

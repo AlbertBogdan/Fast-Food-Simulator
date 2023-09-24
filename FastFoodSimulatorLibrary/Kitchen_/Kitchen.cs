@@ -42,7 +42,7 @@ public class Kitchen : IKitchen
             {
                 var orderTicket = kitchenQueue.Dequeue();
                 chef.ticket = orderTicket;
-                chef.isWork = true;
+                chef.IsWork = true;
                 StringReturned?.Invoke(this, new Message("Kitchen", $"Cook started preparing Order {orderTicket.OrderNumber}."));
                 return chef;
             }

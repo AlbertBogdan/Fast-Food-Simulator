@@ -14,6 +14,6 @@ public class Trader:Person
     public Trader(string Name) : base(Name)
     {
         this.Name = Name;
-        isWork = false;
+        IsWork = false;
     }
 }

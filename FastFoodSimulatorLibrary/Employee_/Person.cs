@@ -6,34 +6,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastFoodSimulatorLibrary.Employee_;
-
-public class Person
+namespace FastFoodSimulatorLibrary.Employee_
 {
-    public event EventHandler PropertyChanged;
-    private bool IsWork { get; set; }
-    public string Name { get; set; }
-    public bool isWork
+    public class Person : INotifyPropertyChanged
     {
-        get { return IsWork; }
-        set
+        private bool isWork;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Name { get; set; }
+
+        public bool IsWork
         {
-            if (IsWork != value)
+            get { return isWork; }
+            set
             {
-                IsWork = value;
-                OnPropertyChanged(nameof(isWork));
+                if (isWork != value)
+                {
+                    isWork = value;
+                    OnPropertyChanged("IsWork"); // Передаем имя свойства "IsWork" строкой
+                }
             }
         }
-    }
 
-    public Person(string Name)
-    {
-        this.Name = Name;
-        isWork = false;
-    }
+        public Person(string Name)
+        {
+            this.Name = Name;
+            IsWork = false;
+        }
 
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

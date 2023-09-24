@@ -14,6 +14,6 @@ public class Chef:Person
     public Chef(string Name) : base(Name)
     {
         this.Name = Name;
-        isWork = false;
+        IsWork = false;
     }
 }
