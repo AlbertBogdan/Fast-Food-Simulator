@@ -29,7 +29,7 @@ public class Person
     public Person(string Name)
     {
         this.Name = Name;
-        IsWork = false;
+        isWork = false;
     }
 
     protected virtual void OnPropertyChanged(string propertyName)

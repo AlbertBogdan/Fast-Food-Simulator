@@ -106,7 +106,7 @@ public class Restaurant : IRestaurant
             }
         }
 
-        foreach (var worker in workers)
+        foreach (var worker in  workers)
         {
             worker.PropertyChanged += Person_PropertyChanged;
         }
@@ -148,13 +148,19 @@ public class Restaurant : IRestaurant
         var freeTrader = (Trader)GetFreeWorker(Traders);
         var customer = new Customer(customerCount);
         var orderTicket = await customer.PlaceOrderAsync(this.kitchen);
+
         freeTrader.ticket = orderTicket;
-        freeTrader.isWork = freeTrader.isWork ? false : true;
+        freeTrader.isWork = true;
+
         orderTickets.Enqueue(orderTicket);
         var freeChefs = GetFreeWorker(Chefs);
 
         StringReturned?.Invoke(this, new Message("TraderDo", $"The {freeTrader.Name} passed the order N{freeTrader.ticket.OrderNumber} to the kitchen"));
-        freeTrader.isWork = freeTrader.isWork ? false : true;
+
+
+        freeTrader.isWork = false;
+        freeTrader.ticket = null;
+        freeTrader = null;
 
         var chef = await kitchen.GetNextOrderAsync((Chef)freeChefs);
 
@@ -163,17 +169,19 @@ public class Restaurant : IRestaurant
         chef.isWork = false;
 
 
-        takingOrders.Enqueue(orderTickets.Dequeue());
+        var res = orderTickets.Dequeue();
+        takingOrders.Enqueue(res);
+
         freeTrader = (Trader)GetFreeWorker(Traders);
-        freeTrader.ticket = takingOrders.First();
-        freeTrader.isWork = freeTrader.isWork ? false : true;
+        freeTrader.ticket = res;
+        freeTrader.isWork = true;
 
 
         await Task.Delay(customerInterval, cancellationToken);
 
         StringReturned?.Invoke(this, new Message("TraderDo", $"{freeTrader.Name} has transferred the order N{freeTrader.ticket.OrderNumber} to the Customer N{customer.CustomerNumber}."));
+        freeTrader.isWork = false;
         takingOrders.Dequeue();
-        freeTrader.isWork = freeTrader.isWork ? false : true;
 
     }
 
@@ -197,10 +205,8 @@ public class Restaurant : IRestaurant
             }
         };
     }
-    private void Queue_ItemEnqueued(object sender, ItemDequeuedEventArgs<OrderTicket> e)
-    {
 
-    }
+
     private void Queue_ItemDequeued(object? sender, ItemDequeuedEventArgs<OrderTicket> e)
     {
         Check(sender);
@@ -218,7 +224,7 @@ public class Restaurant : IRestaurant
         {
             StringReturned?.Invoke(this, new Message("Order", $"{GetOrderList(orderTickets)}"));
         }
-        else if (queue.QueueName == "TakeOrder")
+        else
         {
             StringReturned?.Invoke(this, new Message("TakeOrder", $"{GetOrderList(takingOrders)}"));
         }
