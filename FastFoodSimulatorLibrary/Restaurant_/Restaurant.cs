@@ -18,6 +18,7 @@ public class Restaurant : IRestaurant
 {
     private int customerInterval;
     private int orderInterval;
+    private int orderIntervaltoKitchen;
 
     private CancellationTokenSource cancellationTokenSource;
     private CancellationToken cancellationToken;
@@ -38,10 +39,11 @@ public class Restaurant : IRestaurant
 
 
 
-    public Restaurant(int customerInterval, int orderInterval, int chefcount, int tradecount)
+    public Restaurant(int customerInterval, int orderInterval,int orderIntervaltoKitchen, int chefcount, int tradecount)
     {
         this.customerInterval = customerInterval;
         this.orderInterval = orderInterval;
+        this.orderIntervaltoKitchen = orderIntervaltoKitchen;
 
         this.cancellationTokenSource = new CancellationTokenSource();
         this.cancellationToken = cancellationTokenSource.Token;
@@ -153,7 +155,7 @@ public class Restaurant : IRestaurant
         freeTrader.ticket = orderTicket;
         freeTrader.IsWork = true;
 
-        await Task.Delay(300, cancellationToken);
+        await Task.Delay(orderIntervaltoKitchen, cancellationToken);
         freeTrader.IsWork = false;
 
         orderTickets.Enqueue(orderTicket);

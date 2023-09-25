@@ -36,9 +36,11 @@
 
         <TextBlock Text="Order Interval:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="3" Grid.Column="0" Height="20" Margin="10"/>
         <TextBox x:Name="tbOrderInterval" Foreground="#D0E1F9"  Background="#283655" Grid.Row="3" Grid.Column="1" Width="400" Height="25" Margin="10"/>
+        <TextBlock Text="OrdertoKitchen Interval:" Foreground="#D0E1F9" Background="#1E1F26" Grid.Row="4" Grid.Column="0" Height="20" Margin="10"/>
+        <TextBox x:Name="tbOrderIntervaltoKitchen" Foreground="#D0E1F9"  Background="#283655" Grid.Row="4" Grid.Column="1" Width="400" Height="25" Margin="10"/>
 
-        <Button x:Name="btStart" Foreground="#D0E1F9"  Background="#4D648D" Content="Start" FontSize="20" Click="btStart_Click" Grid.Row="4" Grid.Column="0" Width="100" Height="35" Margin="10"/>
-        <Button x:Name="btStop" Foreground="#D0E1F9"  Background="#4D648D" Content="Stop" FontSize="20" Click="btStop_ClickAsync" Grid.Row="4" Grid.Column="1" Width="100" Height="35" Margin="10"/>
+        <Button x:Name="btStart" Foreground="#D0E1F9"  Background="#4D648D" Content="Start" FontSize="20" Click="btStart_Click" Grid.Row="5" Grid.Column="0" Width="100" Height="35" Margin="10"/>
+        <Button x:Name="btStop" Foreground="#D0E1F9"  Background="#4D648D" Content="Stop" FontSize="20" Click="btStop_ClickAsync" Grid.Row="5" Grid.Column="1" Width="100" Height="35" Margin="10"/>
 
         <Label Content="Cook:" Grid.Row="2" Foreground="#D0E1F9" Background="#1E1F26" Grid.Column="4" Margin="10"/>
         <TextBox x:Name="tbCook" Foreground="#D0E1F9"  Background="#283655" IsReadOnly="True" TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="4" Width="250" Height="250" Margin="10"/>

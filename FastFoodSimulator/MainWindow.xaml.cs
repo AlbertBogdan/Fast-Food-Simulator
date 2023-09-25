@@ -31,13 +31,16 @@ public partial class MainWindow : Window
         int orderInterval = int.TryParse(tbOrderInterval.Text, out number) ? number : 1000;
         tbOrderInterval.Text = orderInterval.ToString();
 
+        int orderIntervaltoKitchen = int.TryParse(tbOrderIntervaltoKitchen.Text, out number) ? number : 1000;
+        tbOrderInterval.Text = orderInterval.ToString();
+
         int ChefCount = int.TryParse(tbChefs.Text, out number) ? number : 5;
         tbChefs.Text = ChefCount.ToString();
 
         int TradeCount = int.TryParse(tbTraders.Text, out number) ? number : 5;
         tbTraders.Text = TradeCount.ToString();
 
-        restaurant = new Restaurant(customerInterval, orderInterval, ChefCount, TradeCount);
+        restaurant = new Restaurant(customerInterval, orderInterval, orderIntervaltoKitchen, ChefCount, TradeCount);
         await StartEvent();
         cancellationTokenSource = new CancellationTokenSource();
         CancellationToken cancellationToken = cancellationTokenSource.Token;
